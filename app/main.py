@@ -6,6 +6,7 @@ import jwt
 from sqlalchemy.orm import Session
 from datetime import timedelta
 from fastapi.middleware.cors import CORSMiddleware
+from routers import router
 
 Base.metadata.create_all(bind=engine)
 
@@ -18,6 +19,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(router)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
