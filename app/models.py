@@ -79,6 +79,7 @@ class Class(Base):
     
     class_id = Column(Integer, primary_key=True)
     class_day = Column(Enum(ClassDay), nullable=False)
+    class_course = Column(String, nullable=False)
     class_hour_start = Column(Time, nullable=False)
     class_hour_end = Column(Time, nullable=False)
     user_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
