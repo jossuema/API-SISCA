@@ -19,6 +19,9 @@ class ClassDay(enum.Enum):
     Saturday = "Sabado"
     Sunday = "Domingo"
 
+user_role_enum = Enum(UserRole, name="user_role_enum")
+class_day_enum = Enum(ClassDay, name="class_day_enum")
+
 # Modelo de User
 class User(Base):
     __tablename__ = 'users'
@@ -28,7 +31,7 @@ class User(Base):
     user_name = Column(String, nullable=False)
     user_lastname = Column(String, nullable=False)
     user_img = Column(String, nullable=True)  # URL para la imagen
-    user_role = Column(Enum(UserRole), nullable=False)
+    user_role = Column(user_role_enum, nullable=False)
     user_password = Column(String, nullable=False)
     
     # Relaciones
@@ -46,13 +49,15 @@ class Subject(Base):
     # Relaciones
     classes = relationship("Class", back_populates="subject")
 
+classroom_type_enum = Enum("lab", "normal", name="classroom_type_enum")
+
 # Modelo de Classroom
 class Classroom(Base):
     __tablename__ = 'classrooms'
     
     classroom_id = Column(Integer, primary_key=True)
     classroom_number = Column(Integer, nullable=False)
-    classroom_type = Column(Enum("lab", "normal"), nullable=False)
+    classroom_type = Column(classroom_type_enum, nullable=False)
     classroom_nfccode = Column(String, nullable=False, unique=True)
     
     # Relaciones
@@ -64,8 +69,7 @@ class Report(Base):
     __tablename__ = 'reports'
     
     report_id = Column(Integer, primary_key=True)
-    report_time = Column(DateTime, nullable=False)
-    report_date = Column(Date, nullable=False)
+    report_datetime = Column(DateTime, nullable=False)
     classroom_id = Column(Integer, ForeignKey('classrooms.classroom_id'), nullable=False)
     user_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
     
@@ -78,7 +82,7 @@ class Class(Base):
     __tablename__ = 'classes'
     
     class_id = Column(Integer, primary_key=True)
-    class_day = Column(Enum(ClassDay), nullable=False)
+    class_day = Column(class_day_enum, nullable=False)
     class_course = Column(String, nullable=False)
     class_hour_start = Column(Time, nullable=False)
     class_hour_end = Column(Time, nullable=False)

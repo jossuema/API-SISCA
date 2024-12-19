@@ -71,6 +71,3 @@ def get_me(token: str = Depends(OAuth2PasswordRequestForm), db: Session = Depend
         }
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
-    
-### ENPOINT SUBIR IMAGEN
-
