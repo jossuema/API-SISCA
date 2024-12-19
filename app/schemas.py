@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, HttpUrl
 from enum import Enum
+from typing import Optional
 
 class UserRoleEnum(str, Enum):
     teacher = "teacher"
@@ -12,7 +13,7 @@ class UserCreate(BaseModel):
     name: str
     lastname: str
     role: UserRoleEnum
-    img_url: HttpUrl | None
+    img_url: Optional[HttpUrl]
 
 # Schema para la respuesta de datos del usuario
 class UserResponse(BaseModel):
@@ -21,7 +22,7 @@ class UserResponse(BaseModel):
     name: str
     lastname: str
     role: UserRoleEnum
-    img_url: HttpUrl | None
+    img_url: Optional[HttpUrl]
 
     class Config:
         orm_mode = True

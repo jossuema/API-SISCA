@@ -6,7 +6,7 @@ import jwt
 from sqlalchemy.orm import Session
 from datetime import timedelta
 from fastapi.middleware.cors import CORSMiddleware
-from routers import router
+from app.routers import router
 
 Base.metadata.create_all(bind=engine)
 

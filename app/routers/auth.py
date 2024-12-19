@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 from app.schemas import UserCreate, UserResponse, Token, TokenRefreshRequest
 from jose import JWTError, jwt
@@ -7,13 +7,13 @@ from app.database import get_db
 from app.controllers import create_user, get_user_by_email, verify_password, create_access_token, create_refresh_token
 import os
 
-app = FastAPI()
+router = APIRouter()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 
 # Endpoint de registro
-@app.post("/register", response_model=UserResponse)
+@router.post("/register", response_model=UserResponse)
 def register(user: UserCreate, db: Session = Depends(get_db)):
     if get_user_by_email(db, user.email):
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -21,7 +21,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 # Endpoint de login
-@app.post("/login", response_model=Token)
+@router.post("/login", response_model=Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = get_user_by_email(db, form_data.username)
     if not user or not verify_password(form_data.password, user.user_password):
@@ -37,7 +37,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     }
 
 # Endpoint para renovar el access token
-@app.post("/refresh-token", response_model=Token)
+@router.post("/refresh-token", response_model=Token)
 def refresh_token(request: TokenRefreshRequest, db: Session = Depends(get_db)):
     try:
         payload = jwt.decode(request.refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -53,7 +53,7 @@ def refresh_token(request: TokenRefreshRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid token")
 
 # Endpoint para obtener datos del usuario autenticado
-@app.get("/me", response_model=UserResponse)
+@router.get("/me", response_model=UserResponse)
 def get_me(token: str = Depends(OAuth2PasswordRequestForm), db: Session = Depends(get_db)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
