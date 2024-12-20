@@ -1,0 +1,11 @@
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+AZURE_SUBSCRIPTION_KEY = os.getenv("AZURE_SUBSCRIPTION_KEY")
+AZURE_FACE_API_ENDPOINT = os.getenv("AZURE_FACE_API_ENDPOINT")
+DEFAULT_PERSON_GROUP_ID = os.getenv("DEFAULT_PERSON_GROUP_ID")
+DATABASE_URL = os.getenv("DATABASE_URL")
+SECRET_KEY= os.getenv('SECRET_KEY')
+ALGORITHM = os.getenv('ALGORITHM')

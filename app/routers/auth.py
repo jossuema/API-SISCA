@@ -5,12 +5,10 @@ from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.controllers import create_user, get_user_by_email, verify_password, create_access_token, create_refresh_token
+from app.config import SECRET_KEY, ALGORITHM
 import os
 
 router = APIRouter()
-
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
 
 # Endpoint de registro
 @router.post("/register", response_model=UserResponse)
